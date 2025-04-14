@@ -9,6 +9,25 @@ import matplotlib.pyplot as plt
 import re
 from datetime import datetime, timedelta
 
+# Check if running in Streamlit Cloud
+if 'connections' not in st.secrets:
+    st.error("""
+    Database configuration not found!
+    
+    Please add your database credentials to Streamlit Cloud secrets:
+    1. Go to your app's settings
+    2. Click on 'Secrets'
+    3. Add the following:
+    
+    [connections.mysql]
+    host = "your_host"
+    database = "axe_assistant"
+    user = "your_user"
+    password = "your_password"
+    port = 3306
+    """)
+    st.stop()
+
 # Updated topics list
 PREDEFINED_TOPICS = [
     "forms",
@@ -59,7 +78,7 @@ def create_db_connection():
             database=st.secrets["connections"]["mysql"]["database"],
             user=st.secrets["connections"]["mysql"]["user"],
             password=st.secrets["connections"]["mysql"]["password"],
-            port=st.secrets["connections"]["mysql"]["port"]
+            port=int(st.secrets["connections"]["mysql"]["port"])
         )
         return connection
     except Error as e:
