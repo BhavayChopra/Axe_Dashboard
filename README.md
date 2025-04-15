@@ -1,87 +1,72 @@
 # Axe Assistant Analytics Dashboard
 
-A comprehensive analytics dashboard for analyzing Axe Assistant interactions, built with Streamlit.
+A comprehensive analytics dashboard for monitoring and analyzing interactions with the Axe Assistant. This dashboard provides insights into user interactions, response times, sentiment analysis, and topic categorization.
 
 ## Features
 
-- Real-time data visualization
-- Topic analysis and classification
-- Sentiment analysis of prompts and responses
-- Response time analysis
-- Client insights and trends
-- Interactive filtering and drill-down capabilities
+- **Real-time Analytics**: Monitor user interactions and response metrics
+- **Sentiment Analysis**: Analyze user prompts and responses using TextBlob
+- **Topic Categorization**: Automatically categorize interactions into predefined topics
+- **Response Time Analysis**: Track and visualize response times
+- **Interactive Visualizations**: Dynamic charts and graphs using Plotly
+- **Word Clouds**: Visual representation of common terms in prompts and responses
+- **Client Insights**: Detailed analysis of client interactions and feedback
 
-## Deployment
+## Prerequisites
 
-This dashboard is deployed on Streamlit Community Cloud. To access it:
+- Python 3.8 or higher
+- MySQL Server
+- Required Python packages (listed in requirements.txt)
 
-1. Visit the dashboard at: [Your Streamlit Cloud URL]
-2. No installation or setup required
-3. Access is restricted to authorized users
-
-## Local Development
-
-If you want to run the dashboard locally:
+## Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/axe-assistant-analytics.git
-cd axe-assistant-analytics
+git clone https://github.com/BhavayChopra/Axe_Dashboard.git
+cd Axe_Dashboard
 ```
 
-2. Create and activate a virtual environment (recommended):
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
+2. Install the required packages:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Run the dashboard:
+3. Set up your environment variables:
+   - Create a `.env` file based on `.env.example`
+   - Update the database credentials in the `.env` file
+
+## Usage
+
+1. Start the Streamlit app:
 ```bash
 streamlit run axe_analysis_improved.py
 ```
 
+2. Access the dashboard in your web browser at `http://localhost:8501`
+
 ## Dashboard Sections
 
-1. **Trend Analysis**
-   - Weekly interaction trends
-   - Hourly usage patterns
-   - Daily activity analysis
+1. **Key Metrics**: Overview of total interactions, positive reaction rate, feedback responses, and average response time
+2. **Trend Analysis**: Weekly interaction trends and time-based analysis
+3. **Content Analysis**: Word clouds and sentiment analysis of prompts and responses
+4. **Topic Analysis**: Distribution and sentiment analysis by topic
+5. **Response Analysis**: Detailed analysis of response times and their impact
+6. **Client Insights**: Analysis of client interactions and feedback
 
-2. **Content Analysis**
-   - Word clouds for prompts and responses
-   - Sentiment distribution
-   - Negative sentiment drill-down
+## Database Configuration
 
-3. **Topic Analysis**
-   - Topic distribution
-   - Sentiment by topic
-   - Reaction analysis by topic
+The dashboard connects to a MySQL database with the following structure:
+- Table: `axe_assistant_prompts_and_responses`
+- Required fields: thread_id, user_id, client_name, client_type, client_sector, client_country, thread_created_on, user_prompt, response, reaction, feedback, feedback_updated_on
 
-4. **Response Analysis**
-   - Response time distribution
-   - Response time vs reaction analysis
-   - Time-based performance metrics
+## Contributing
 
-5. **Client Insights**
-   - Client distribution
-   - Sector analysis
-   - Global interaction patterns
-
-## Security
-
-- The dashboard is deployed on Streamlit Community Cloud
-- Database credentials are securely stored in Streamlit's secrets management
-- Access is restricted to authorized users
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Support
+## Contact
 
-For support, please contact the maintainers directly. 
+For any questions or support, please contact the repository owner. 

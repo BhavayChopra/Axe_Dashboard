@@ -1,6 +1,5 @@
 # Environment variables
 .env
-.streamlit/secrets.toml
 
 # Python
 __pycache__/
@@ -36,4 +35,11 @@ ENV/
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Logs
+*.log
+
+# Local development
+*.sqlite3
+*.db 
