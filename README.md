@@ -15,7 +15,7 @@ A comprehensive analytics dashboard for monitoring and analyzing interactions wi
 ## Prerequisites
 
 - Python 3.8 or higher
-- MySQL Server
+- MySQL Server (local installation)
 - Required Python packages (listed in requirements.txt)
 
 ## Installation
@@ -31,9 +31,19 @@ cd Axe_Dashboard
 pip install -r requirements.txt
 ```
 
-3. Set up your environment variables:
-   - Create a `.env` file based on `.env.example`
-   - Update the database credentials in the `.env` file
+3. Set up your database credentials:
+   - Create a new file named `.env` in the project root directory
+   - Copy the contents from `.env.example` to your `.env` file
+   - Update the following values in your `.env` file:
+     ```
+     DB_HOST=localhost
+     DB_NAME=axe_assistant
+     DB_USER=your_mysql_username
+     DB_PASSWORD=your_mysql_password
+     DB_PORT=3306
+     ```
+   - Replace `your_mysql_username` and `your_mysql_password` with your actual MySQL credentials
+   - Make sure your MySQL server is running locally on port 3306
 
 ## Usage
 
@@ -55,9 +65,38 @@ streamlit run axe_analysis_improved.py
 
 ## Database Configuration
 
-The dashboard connects to a MySQL database with the following structure:
+The dashboard expects a MySQL database with the following structure:
 - Table: `axe_assistant_prompts_and_responses`
 - Required fields: thread_id, user_id, client_name, client_type, client_sector, client_country, thread_created_on, user_prompt, response, reaction, feedback, feedback_updated_on
+
+If you need to create the database and table, you can use the following SQL commands:
+```sql
+CREATE DATABASE axe_assistant;
+USE axe_assistant;
+
+CREATE TABLE axe_assistant_prompts_and_responses (
+    thread_id VARCHAR(255),
+    user_id VARCHAR(255),
+    client_name VARCHAR(255),
+    client_type VARCHAR(255),
+    client_sector VARCHAR(255),
+    client_country VARCHAR(255),
+    thread_created_on DATETIME,
+    user_prompt TEXT,
+    response TEXT,
+    reaction VARCHAR(255),
+    feedback TEXT,
+    feedback_updated_on DATETIME
+);
+```
+
+## Troubleshooting
+
+If you encounter connection issues:
+1. Verify your MySQL server is running: `mysql.server status`
+2. Check your credentials in the `.env` file
+3. Ensure the database and table exist with the correct structure
+4. Verify your MySQL user has the necessary permissions
 
 ## Contributing
 

@@ -8,23 +8,35 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import re
 from datetime import datetime, timedelta
+import os
+from dotenv import load_dotenv
 
-# Check if running in Streamlit Cloud
-if 'connections' not in st.secrets:
+# Load environment variables
+load_dotenv()
+
+# Database configuration
+DB_CONFIG = {
+    "host": os.getenv("DB_HOST", "localhost"),
+    "database": os.getenv("DB_NAME", "axe_assistant"),
+    "user": os.getenv("DB_USER", "root"),
+    "password": os.getenv("DB_PASSWORD", ""),
+    "port": int(os.getenv("DB_PORT", "3306"))
+}
+
+# Check if required environment variables are set
+if not all([DB_CONFIG["host"], DB_CONFIG["database"], DB_CONFIG["user"], DB_CONFIG["password"]]):
     st.error("""
     Database configuration not found!
     
-    Please add your database credentials to Streamlit Cloud secrets:
-    1. Go to your app's settings
-    2. Click on 'Secrets'
-    3. Add the following:
+    Please create a .env file in the project root directory with the following content:
     
-    [connections.mysql]
-    host = "your_host"
-    database = "axe_assistant"
-    user = "your_user"
-    password = "your_password"
-    port = 3306
+    DB_HOST=localhost
+    DB_NAME=axe_assistant
+    DB_USER=your_mysql_username
+    DB_PASSWORD=your_mysql_password
+    DB_PORT=3306
+    
+    Replace the values with your actual MySQL credentials.
     """)
     st.stop()
 
@@ -70,41 +82,48 @@ def categorize_topic(text):
             return topic
     return "other"
 
-# Database Configuration using Streamlit Secrets
 def create_db_connection():
+    """Create a connection to the MySQL database."""
     try:
         connection = mysql.connector.connect(
-            host=st.secrets["connections"]["mysql"]["host"],
-            database=st.secrets["connections"]["mysql"]["database"],
-            user=st.secrets["connections"]["mysql"]["user"],
-            password=st.secrets["connections"]["mysql"]["password"],
-            port=int(st.secrets["connections"]["mysql"]["port"])
+            host=DB_CONFIG["host"],
+            database=DB_CONFIG["database"],
+            user=DB_CONFIG["user"],
+            password=DB_CONFIG["password"],
+            port=DB_CONFIG["port"]
         )
         return connection
     except Error as e:
         st.error(f"Error connecting to MySQL: {e}")
+        st.error("""
+        Please verify:
+        1. Your MySQL server is running
+        2. Your credentials in the .env file are correct
+        3. The database and table exist with the correct structure
+        """)
         return None
 
 @st.cache_data(ttl=600)
 def load_data():
+    """Load data from the MySQL database."""
     connection = create_db_connection()
     if connection:
         try:
             query = """
-                SELECT 
-                    thread_id,
-                    user_id,
-                    client_name,
-                    client_type,
-                    client_sector,
-                    client_country,
-                    thread_created_on,
-                    user_prompt,
-                    response,
-                    reaction,
-                    feedback,
-                    feedback_updated_on
-                FROM axe_assistant_prompts_and_responses
+            SELECT 
+                thread_id,
+                user_id,
+                client_name,
+                client_type,
+                client_sector,
+                client_country,
+                thread_created_on,
+                user_prompt,
+                response,
+                reaction,
+                feedback,
+                feedback_updated_on
+            FROM axe_assistant_prompts_and_responses
             """
             
             df = pd.read_sql(query, connection)
